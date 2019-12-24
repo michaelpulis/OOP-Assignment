@@ -1,5 +1,5 @@
 package StockExchange;
 
-public class ExchangePlatformOperator {
+public class ExchangePlatformOperator extends ExchangeUser {
 
 }
