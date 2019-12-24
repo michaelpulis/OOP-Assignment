@@ -35,7 +35,7 @@ public class Security {
 	public void setPrice(float price) {
 		this.price = price;
 	}
-	public static float getTotalSupply() {
+	public float getTotalSupply() {
 		return totalSupply;
 	}
 	public static void setTotalSupply(float totalSupply) {

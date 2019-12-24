@@ -7,44 +7,44 @@ import java.util.Map;
 
 public class MatchingEngine {
 
-	public static void fulFillOrders() {
+	public void fulFillOrders(ExchangePlatform exchangePlatform) {
 		// Check if there are any orders
-		for(Map.Entry<Security, ArrayList<Order>> entry: ExchangePlatform.requestedSecurities.entrySet()) {
+		for(Map.Entry<Integer, ArrayList<Order>> entry: exchangePlatform.requestedSecurities.entrySet()) {
 			
-			int SI = entry.getKey().getSI();
-			ArrayList<Order> orders = entry.getValue();
+			int SI = entry.getKey();
+			ArrayList<Order> purchaseOrders = entry.getValue();
 			System.out.println("Checking for " + SI);
 			
 			// For each security, check if there are listings that have corresponding traders
-			for(Order order : orders) {
+			for(Order purchaseOrder : purchaseOrders) {
 				// In the event that there are no listings for this security
-				if(ExchangePlatform.availableSecurities.get(entry.getKey()).size() == 0){
+				if(exchangePlatform.availableSecurities.get(entry.getKey()).size() == 0){
 					continue;
 				}else {
 					float minimum = 0;
 					boolean initial = true;
 					int matchIndex = -1;
+					Order listingToPurchase = null;
 					
-					for(Order listing : ExchangePlatform.availableSecurities.get(entry.getKey())) {
+					for(Order sellOrder : exchangePlatform.availableSecurities.get(entry.getKey())) {
 						//Attempt to find the best suited listing-trader pairing for this particular trader
-						float priceDifference = (float)(Math.abs(order.getPrice()-listing.getPrice()));
-						if(initial || minimum > priceDifference){
+						float priceDifference = purchaseOrder.getPrice()-sellOrder.getPrice();
+						if(initial || (priceDifference > 0 && minimum > priceDifference) && purchaseOrder.getQuantity() == sellOrder.getQuantity()){
 							if(initial)
 								initial = false;
 							
 							minimum = priceDifference;
-							matchIndex = ExchangePlatform.availableSecurities.get(entry.getKey()).indexOf(listing);
+							listingToPurchase = sellOrder;
 						}
 					}
 					
 					System.out.println("Best match is: " + minimum);
-					//TODO Order book add log
-					
-					
-					
+					if(listingToPurchase != null) {
+						exchangePlatform.performPurchase(entry.getKey(), purchaseOrder, listingToPurchase);
+						break;
+					}
 				}
 			}
-			
 		}
 	}
 }

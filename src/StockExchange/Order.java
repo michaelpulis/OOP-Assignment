@@ -15,6 +15,7 @@ public class Order {
 		this.price = price;
 		this.date = date;
 		this.quantity = quantity;
+		this.trader = trader;
 	}
 
 	public int getSI() {
@@ -53,6 +54,14 @@ public class Order {
 		return "Price:\t" + price + "\tQuantity:\t" + quantity + "\tDate:\t"+date+"\tTrader:\t"+trader.getName();
 	}
 	
+	public String getStringExcl() {
+		return "Price:\t" + price + "\tQuantity:\t" + quantity + "\tDate:\t"+date;
+	}
+	
+	public Trader getTrader() {
+		return trader;
+	}
+	
 	static Order getOrderFromInput(Trader currentTrader) {
 		System.out.println("Enter price:");
 		float price = Utils.getFloat();
@@ -60,7 +69,7 @@ public class Order {
 		System.out.println("Enter quantity:");
 		float quantity = Utils.getFloat();
 		
-		String date = LocalDate.now().toString() + " - " + LocalTime.now().toString();
+		String date = Utils.getTime();
 		
 		System.out.println("Enter SI of Security to be added:");
 		int SI = Utils.getInt();

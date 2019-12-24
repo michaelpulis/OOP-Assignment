@@ -5,8 +5,9 @@ public class ExchangeUser {
 	private String name;
 	private boolean approved;
 	
-	void setLoginDetails(String user, String pass, String name) {
+	void setLoginDetails(String user, String pass, String name, boolean approved) {
 		loginData = new Tuple(user, pass);
+		this.approved = approved;
 		this.setName(name);
 	}
 	
@@ -32,6 +33,11 @@ public class ExchangeUser {
 	
 	public String getPassword() {
 		return loginData.password;
+	}
+	
+	public String getString() {
+		
+		return "Username:\t" + getUsername() + "\tPassword:\t"+getPassword()+"\tName\t"+name;
 	}
 		
 }

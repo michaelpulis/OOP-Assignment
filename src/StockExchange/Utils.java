@@ -1,5 +1,7 @@
 package StockExchange;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class Utils {
@@ -23,6 +25,10 @@ public class Utils {
 				System.out.println("Enter a valid number!");
 			}
 		}
+	}
+	
+	public static String getTime() {
+		 return LocalDate.now().toString() + " - " + LocalTime.now().toString();
 	}
 	
 	
