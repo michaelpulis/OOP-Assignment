@@ -13,7 +13,6 @@ public class MatchingEngine {
 			
 			int SI = entry.getKey();
 			ArrayList<Order> purchaseOrders = entry.getValue();
-			System.out.println("Checking for " + SI);
 			
 			// For each security, check if there are listings that have corresponding traders
 			for(Order purchaseOrder : purchaseOrders) {
@@ -23,13 +22,12 @@ public class MatchingEngine {
 				}else {
 					float minimum = 0;
 					boolean initial = true;
-					int matchIndex = -1;
 					Order listingToPurchase = null;
 					
 					for(Order sellOrder : exchangePlatform.availableSecurities.get(entry.getKey())) {
 						//Attempt to find the best suited listing-trader pairing for this particular trader
 						float priceDifference = purchaseOrder.getPrice()-sellOrder.getPrice();
-						if(initial || (priceDifference > 0 && minimum > priceDifference) && purchaseOrder.getQuantity() == sellOrder.getQuantity()){
+						if(priceDifference >= 0 && (initial || minimum > priceDifference) && purchaseOrder.getQuantity() == sellOrder.getQuantity()){
 							if(initial)
 								initial = false;
 							
@@ -38,7 +36,6 @@ public class MatchingEngine {
 						}
 					}
 					
-					System.out.println("Best match is: " + minimum);
 					if(listingToPurchase != null) {
 						exchangePlatform.performPurchase(entry.getKey(), purchaseOrder, listingToPurchase);
 						break;

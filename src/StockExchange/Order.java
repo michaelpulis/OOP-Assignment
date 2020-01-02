@@ -3,19 +3,27 @@ package StockExchange;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+
+
 public class Order {
 	private int SI;
 	private String date;
 	private float price;
 	private float quantity;
 	private Trader trader;
+	private Type type;
+	private boolean cancelled;
+	private int orderID;
 	
-	public Order(int SI, float price, float quantity, String date, Trader trader) {
+	public Order(int orderID, int SI, float price, float quantity, String date, Type type, Trader trader) {
+		this.orderID = orderID;
 		this.SI = SI;
 		this.price = price;
 		this.date = date;
 		this.quantity = quantity;
+		this.type = type;
 		this.trader = trader;
+		this.cancelled = false;
 	}
 
 	public int getSI() {
@@ -51,18 +59,34 @@ public class Order {
 	}
 	
 	public String getString() {
-		return "Price:\t" + price + "\tQuantity:\t" + quantity + "\tDate:\t"+date+"\tTrader:\t"+trader.getName();
+		return "OrderID\t"+orderID+ "\tPrice:\t" + price + "\tQuantity:\t" + quantity + "\tDate:\t"+date+"\tTrader:\t"+trader.getName();
 	}
 	
 	public String getStringExcl() {
-		return "Price:\t" + price + "\tQuantity:\t" + quantity + "\tDate:\t"+date;
+		return "OrderID\t"+orderID+ "\tPrice:\t" + price + "\tQuantity:\t" + quantity + "\tDate:\t"+date;
 	}
 	
 	public Trader getTrader() {
 		return trader;
 	}
 	
-	static Order getOrderFromInput(Trader currentTrader) {
+	public int getOrderID() {
+		return this.orderID;
+	}
+	
+	public Type getType() {
+		return this.type;
+	}
+	
+	public boolean getCancelled() {
+		return cancelled;
+	}
+	
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
+	}
+	
+	static Order getOrderFromInput(int orderID, Trader currentTrader, Type type) {
 		System.out.println("Enter price:");
 		float price = Utils.getFloat();
 		
@@ -74,7 +98,8 @@ public class Order {
 		System.out.println("Enter SI of Security to be added:");
 		int SI = Utils.getInt();
 		
-		return new Order(SI, price, quantity, date, currentTrader);
+		return new Order(orderID, SI, price, quantity, date, type, currentTrader);
 	}
+	
 	
 }

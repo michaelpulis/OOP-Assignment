@@ -10,13 +10,14 @@ import java.time.LocalTime;
 import java.time.LocalDate;
 
 public class ExchangePlatform {
-	static HashMap<Integer, ArrayList<Order>> availableSecurities = new HashMap<>();
-	static HashMap<Integer, ArrayList<Order>> requestedSecurities = new HashMap<>();
+	
 	HashMap<Integer, Security> securities = new HashMap<>();
+	public int orderCounter = 0;
 	
 	MatchingEngine engine;
+	AuditTrail auditTrail;
 	OrderBook orderBook;
-	LoginSystem login;
+	public LoginSystem login;
 	
 	Scanner sc = new Scanner(System.in);
 	boolean signedIn = false;
@@ -30,136 +31,24 @@ public class ExchangePlatform {
 			
 		login = new LoginSystem();
 		engine = new MatchingEngine();
+		auditTrail = new AuditTrail();
 		orderBook = new OrderBook();
-		
-		debugManualAddSecurity("RS2", "Banking Software", 2.14f, 0, 1);
-		
-		while(true) {
-			ExchangeUser user = login.attemptLogin();	
-			if(user == null) {
-				System.out.println("Error. Please contact the System Admin? haha this should never occur.");
-				break;
-			}else if(user instanceof Trader) {
-				currentUser = (Trader) user;
-				displayTraderScreen();
-			}else if(user instanceof Lister) {
-				currentUser = (Lister) user;
-				displayListerScreen();
-			}else if(user instanceof ExchangePlatformOperator)
-				displayOperatorScreen();
-			
-		}
 	}
 	
-	void displayListerScreen() {
-		System.out.println("------------------------");
-		System.out.println("   LISTER SCREEN 1000   ");
-		System.out.println("------------------------");
-		System.out.println("1. Add a security");
-		System.out.println("2. View Securities");
-		System.out.println("3. Cancel Order");
-		System.out.println("4. Exit");
-		
-		while(true) {
-			int choice = Utils.getInt();
-			
-			if(choice == 1) {
-				//securities.put(getNewSI(), getSecurityFromInput());
-				//debugManualAddSecurity("RS2", "Banking Software", 2.14f, 0, 1);
-			}
+	
+	void cancelOrder(Order order) {
+		if(order.getType() == Type.purchase) {
+			orderBook.removeOrderBySI(order, Type.purchase);
+		}else if(order.getType() == Type.sell) {
+			orderBook.removeOrderBySI(order, Type.sell);
+			availableSecurities.get(order.getSI()).remove(order);
 		}
+		order.setCancelled(true);
 	}
 	
-	void displayOperatorScreen() {
-		while(true) {
-			System.out.println("1. Approve new users");
-			System.out.println("2. Exit");
-			
-			int choice = Utils.getInt();
-			int[] indicies = new int [login.users.size()];
-			if(choice == 1) {
-				System.out.println("Users pending approval:");
-				int i = 0, approvedCounter = 0;
-				for(ExchangeUser user : login.users) {
-					if(user.getApproved())
-						indicies[i] = -1;
-					else {
-						System.out.println((1+approvedCounter)+ ") " + user.getString());
-						indicies[approvedCounter++] = i;
-					}
-					i++;
-				}
-				
-				while(true) {
-					choice = Utils.getInt() - 1;
-					if(indicies[choice] != -1) {
-						login.approveUser(indicies[choice]);
-						break;
-					}else {
-						System.out.println("Not a valid index. Enter valid number:");
-					}
-				}
-			}else if (choice == 2) {
-				break;
-			}
-		}
-	}
 	
-	void displayTraderScreen() {
-		
-		
-		while(true) {
-			System.out.println("------------------------");
-			System.out.println("  EXCHANGE SYSTEM 1000  ");
-			System.out.println("------------------------");
-			
-			//addOrderToMap(debugManualOrder(2.2f, 10, "Today", 60), availableSecurities);
-			//addOrderToMap(debugManualOrder(3.5f, 10, "Today", 60), availableSecurities);
-			//addOrderToMap(debugManualOrder(2.3f, 10, "Today", 60), requestedSecurities);
-			//addOrderToMap(debugManualOrder(2.8f, 10, "Today", 60), requestedSecurities);
-			
-			System.out.println("1. Sell");
-			System.out.println("2. Purchase");
-			System.out.println("3. Exchange Operator Controls");
-			System.out.println("4. Print Selling");
-			System.out.println("5. Print Buying");
-			System.out.println("6. Run Matching");
-			System.out.println("7. Ouput Logbook");
-			System.out.println("8. Ouput Securites");
-			System.out.println("9. Log Out");
-			
-			
-			
-			int choice = Utils.getInt();
-			if(choice == 1) {
-				System.out.println("Choose security to Sell");
-				outputKeys(availableSecurities);
-				Order inputtedOrder = Order.getOrderFromInput((Trader) currentUser);
-				addOrderToMap(inputtedOrder, availableSecurities);
-				addTotalSupply(inputtedOrder.getSI(), inputtedOrder.getQuantity());
-				engine.fulFillOrders(this);
-				
-			}else if(choice == 2) {
-				System.out.println("Choose security to Purchase");
-				outputKeys(requestedSecurities);
-				Order inputtedOrder = Order.getOrderFromInput((Trader)currentUser);
-				addOrderToMap(inputtedOrder, requestedSecurities);
-				engine.fulFillOrders(this);
-			}else if(choice == 4) {
-				outputMap(availableSecurities);
-			}else if(choice == 5) {
-				outputMap(requestedSecurities);
-			}else if(choice == 6) {
-				engine.fulFillOrders(this);
-			}else if(choice == 7) {
-				orderBook.outputTransactions();
-			}else if(choice == 8) {
-				outputSecurities();
-			}else if(choice == 9) {
-				break;
-			}
-		}
-	}
+	
+	
 	
 	void outputSecurities() {
 		for(Map.Entry<Integer, Security> mapEntry : securities.entrySet()) {
@@ -169,77 +58,179 @@ public class ExchangePlatform {
 			
 	}
 	
-	void addTotalSupply(int SI, float quantity) {
-		for(int securitySI : availableSecurities.keySet()) {
-			if(securitySI == SI) {
-				securities.get(SI).setTotalSupply(securities.get(SI).getTotalSupply() + SI);
-			}
-		}
+	protected void addTotalSupply(int SI, float quantity) {
+		securities.get(SI).setTotalSupply(securities.get(SI).getTotalSupply() + quantity);
 	}
 	
 	public void performPurchase(int SI, Order purchaseOrder, Order sellOrder) {
-		System.out.println("Order match between the following two orders:");
+		System.out.println("Order fulfilled between the following:");
 		System.out.println("BUY :" + purchaseOrder.getString());
 		System.out.println("SELL:" + sellOrder.getString());
 		
 		Transaction temp = new Transaction(sellOrder, purchaseOrder);
-		orderBook.addTransaction(temp);
+		
+		auditTrail.addTransaction(temp);
 		availableSecurities.get(SI).remove(sellOrder);
 		requestedSecurities.get(SI).remove(purchaseOrder);
 		
-	}
-		
-	public void addOrder (int SI, float price, float quantity, String date) {
-		if(requestedSecurities.containsKey(SI)) {;
-			requestedSecurities.get(SI).add(new Order(SI, price, quantity, date, (Trader) currentUser));
-		}else {
-			System.out.println("Error, there is NO Security with SI:"+SI);
-		}
-	}
-	
-	public void addAvailability (int SI, float price, float quantity, String date) {
-		if(availableSecurities.containsKey(SI)) {
-			
-			availableSecurities.get(SI).add(new Order(SI, price, quantity, date, (Trader) currentUser));
-		}else {
-			System.out.println("Error, there is NO Security with SI:"+SI);
-		}
+		//Since total supply has decreased, decrease the total supply
+		securities.get(SI).setTotalSupply(securities.get(SI).getTotalSupply() - purchaseOrder.getQuantity());
 	}
 	
 	void addOrderToMap(Order order, HashMap<Integer, ArrayList<Order>> map){
+		boolean found = false;
 		for(Map.Entry<Integer, ArrayList<Order>> mapEntry : map.entrySet()) {
 			int SI = mapEntry.getKey();
-			System.out.println(SI + " vs " + order.getSI());
 			
 			if(SI != order.getSI()) {
 				continue;
 			}else {
+				found = true;
 				map.get(SI).add(order);
+				break;
 			}
 		}
 	}
-	
-	void outputMap(HashMap<Integer, ArrayList<Order>> map) {
-		for(Map.Entry<Integer, ArrayList<Order>> mapEntry : map.entrySet()) {
-			System.out.println(securities.get(mapEntry.getKey()).getDescription());
-			System.out.println("--------");
-			for(Order order : mapEntry.getValue()) {
-				System.out.println("\t" + order.getString());
-			}
-			
-		}
-	}
-	
-	// Kumdita methods
 	
 	void debugManualAddSecurity(String name, String description, float price, float totalSupply, int SI) {
-		Security temp = new Security(name, description, price, totalSupply, SI);
+		Security temp = new Security(name, description, price, SI, null);
 		availableSecurities.put(SI, new ArrayList<Order>());
 		requestedSecurities.put(SI, new ArrayList<Order>());
 		securities.put(SI,  temp);
 	}
 	
+	void cancelOrderRelatedTo(Lister lister) {
+		//List purchase orders.
+		System.out.println("The following are securities listed by " + lister.getName());
+		System.out.println("Select an order to cancel from the following:");
+		
+		System.out.println("Purchase Orders:");
+		for(Map.Entry<Integer, ArrayList<Order>> mapEntry : requestedSecurities.entrySet()) {
+			if(securities.get(mapEntry.getKey()).getLister() == lister) {
+				System.out.println("\tSECURITIES: "+securities.get(mapEntry.getKey()).getString());
+				System.out.println("\t-------------------------------------------------------");
+				ArrayList<Order> purchaseOrders = mapEntry.getValue();
+				for(Order order : purchaseOrders) {
+					System.out.println("\t\tORDERS: "+order.getString());
+				}
+			}
+			System.out.println();
+		}
+			
+		//List sell orders
+		System.out.println("Sell Orders:");
+		for(Map.Entry<Integer, ArrayList<Order>> mapEntry : availableSecurities.entrySet()) {
+			if(securities.get(mapEntry.getKey()).getLister() == lister) {
+				System.out.println("\tSECURITY: "+securities.get(mapEntry.getKey()).getString());
+				System.out.println("\t-------------------------------------------------------");
+				ArrayList<Order> sellOrders = mapEntry.getValue();
+				for(Order order : sellOrders) {
+					System.out.println("\t\tORDER: "+order.getString());
+				}
+			}
+			System.out.println();
+		}
+		
+		int inputtedSI, inputtedOrderID;
+		System.out.println("Enter SI:");
+		inputtedSI = Utils.getInt();
+		System.out.println("Enter order number: ");
+		inputtedOrderID = Utils.getInt();
+		
+		if(!requestedSecurities.containsKey(inputtedSI)) {
+			System.out.println("Invalid indicies entered.");
+		}else {
+			//Check which Order is to be deleted
+			
+			for(Order order: availableSecurities.get(inputtedSI)) {
+				if(order.getOrderID() == inputtedOrderID) 
+					if(Lister.cancelOrder(this,  order, lister)) 
+						System.out.println("Order Cancelled");
+					else
+						System.out.println("Current user does not have permissions over order requested!");
+					
+					
+				
+				System.out.println();
+			}
+			
+			for(Order order: requestedSecurities.get(inputtedSI)) {
+				if(order.getOrderID() == inputtedOrderID)
+					if(Lister.cancelOrder(this, order, lister))
+						System.out.println("Order Cancelled");
+					else
+						System.out.println("Current user does not have permissions over order requested!");
+					
+				
+				System.out.println();
+			}
+		}
+	}
 	
+	void cancelOrderRelatedTo(Trader trader) {
+		//List purchase orders.
+		System.out.println("Select an order to cancel from the following:");
+		
+		System.out.println("Purchase Orders:");
+		for(Map.Entry<Integer, ArrayList<Order>> mapEntry : requestedSecurities.entrySet()) {
+			
+			System.out.println("\t"+securities.get(mapEntry.getKey()).getString());
+			System.out.println("\t-------------------------------------------------------");
+			ArrayList<Order> purchaseOrders = mapEntry.getValue();
+			for(Order order : purchaseOrders) {
+				if(order.getTrader() == trader) {
+					System.out.println("\t\tORDER: "+order.getString());
+				}
+			}
+			
+			System.out.println();
+		}
+			
+		//List sell orders
+		System.out.println("Sell Orders:");
+		for(Map.Entry<Integer, ArrayList<Order>> mapEntry : availableSecurities.entrySet()) {
+			System.out.println("\tSECURITY: "+securities.get(mapEntry.getKey()).getString());
+			System.out.println("\t-------------------------------------------------------");
+			ArrayList<Order> purchaseOrders = mapEntry.getValue();
+			for(Order order : purchaseOrders) {
+				if(order.getTrader() == trader) {
+					System.out.println("\t\tORDER: "+order.getString());
+				}
+			}
+			System.out.println();
+		}
+		
+		int inputtedSI, inputtedOrderID;
+		System.out.println("Enter SI:");
+		inputtedSI = Utils.getInt();
+		System.out.println("Enter order number: ");
+		inputtedOrderID = Utils.getInt();
+		
+		if(!requestedSecurities.containsKey(inputtedSI)) {
+			System.out.println("Invalid indicies entered.");
+		}else {
+		
+				//Check which Order is to be deleted
+			for(Order order: availableSecurities.get(inputtedSI)) {
+				if(order.getOrderID() == inputtedOrderID) {
+					if(Trader.cancelOrder(trader, order, this)) {
+						System.out.println("Order cancelled");
+					}else
+						System.out.println("Current user does not have permissions over order requested!");
+					
+				}
+			}
+			
+			for(Order order: requestedSecurities.get(inputtedSI)) {
+				if(order.getOrderID() == inputtedOrderID) {
+					if(Trader.cancelOrder(trader, order, this)) {
+						System.out.println("Order cancelled");
+					}else 
+						System.out.println("Current user does not have permissions over order requested!");
+				}	
+			}
+		}
+	}
 	
 	void addSecurityFromInput() {
 		System.out.println("Enter name:");
@@ -251,28 +242,14 @@ public class ExchangePlatform {
 		System.out.println("Enter price:");
 		float price = Utils.getFloat();
 		
-		System.out.println("Enter total supply:");
-		float totalSupply = Utils.getFloat();
-		
 		int SI = getNewSI();
 		
-		Security temp = new Security(name, description, price, totalSupply, SI);
-		availableSecurities.put(SI, new ArrayList<Order>());
-		requestedSecurities.put(SI, new ArrayList<Order>());
+		Lister.enlistSecurity(this, new Security(name, description, price, SI , (Lister) currentUser));
 	}
 	
-	Order debugManualOrder(float price, float quantity, String date, int SI) {
-		Trader temp = (Trader) currentUser;
-		return new Order(SI, price, quantity, date, temp);
-	}
 	
-	void outputKeys(HashMap<Integer, ArrayList<Order>> map) {
-		for(int SI : map.keySet()) {
-			System.out.println("SI: "+SI + " -- " + securities.get(SI).getName());
-		}
-	}
 	
-	int getNewSI() {
+	public int getNewSI() {
 		while(true) {
 			int random = (int)(Math.random() * 100);
 			if(!availableSecurities.isEmpty())

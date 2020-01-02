@@ -3,16 +3,18 @@ package StockExchange;
 public class Security {
 	private String name, description;
 	private float price;
-	private static float totalSupply;
+	private float totalSupply;
 	private boolean listed;
 	private int SI;
+	private Lister lister;
 	
-	public Security(String name, String description, float price, float totalSupply, int SI) {
+	public Security(String name, String description, float price, int SI, Lister lister) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
-		this.totalSupply = totalSupply;
+		this.totalSupply = 0;
 		this.SI = SI;
+		this.lister = lister;
 	}
 	
 	public String getDescription() {
@@ -38,8 +40,8 @@ public class Security {
 	public float getTotalSupply() {
 		return totalSupply;
 	}
-	public static void setTotalSupply(float totalSupply) {
-		Security.totalSupply = totalSupply;
+	public void setTotalSupply(float totalSupply) {
+		this.totalSupply = totalSupply;
 	}
 	
 	public boolean isListed() {
@@ -61,5 +63,21 @@ public class Security {
 	public String getString() {
 		return "Name:\t" + name + "\tDesc:\t"+description + "\tPrice:\t" + price + "\tTotal Supply:\t" + totalSupply + "\tSI:\t"+SI;
 	}
+
+	public Lister getLister() {
+		return this.lister;
+	}
 	
+	public static Security getSecurityFromInput(int SI, Lister lister) {
+		System.out.println("Enter Security name:");
+		String name = Utils.getString();
+		
+		System.out.println("Enter Security description:");
+		String description = Utils.getString();
+		
+		System.out.println("Enter Security recommended price:");
+		float price = Utils.getFloat();
+		
+		return new Security(name, description, price, SI, lister);
+	}
 }

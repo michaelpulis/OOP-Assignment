@@ -5,7 +5,9 @@ public class ExchangeUser {
 	private String name;
 	private boolean approved;
 	
-	void setLoginDetails(String user, String pass, String name, boolean approved) {
+	public ExchangeUser() {}
+	
+	public ExchangeUser(String user, String pass, String name, boolean approved) {
 		loginData = new Tuple(user, pass);
 		this.approved = approved;
 		this.setName(name);
@@ -36,8 +38,19 @@ public class ExchangeUser {
 	}
 	
 	public String getString() {
-		
 		return "Username:\t" + getUsername() + "\tPassword:\t"+getPassword()+"\tName\t"+name;
+	}
+	
+	public boolean cancelOrder(ExchangePlatform ep, int SI, Order order) {
+		
+		// Checking if order is a cancel order or a purchase oder
+		if(order.getType() == Type.purchase) {
+			
+		}else if(order.getType() == Type.sell){
+			
+		}
+		
+		return false;
 	}
 		
 }

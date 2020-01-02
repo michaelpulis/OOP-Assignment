@@ -17,6 +17,10 @@ public class Utils {
 		}
 	}
 	
+	public static String getString() {
+		return sc.next().trim();
+	}
+	
 	public static float getFloat() {
 		while(true) {
 			try{
