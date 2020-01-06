@@ -21,12 +21,15 @@ public class OrderBook {
 		this.requestedSecurities = requestedSecurities;
 	}
 	
-	
-	
-	void removeOrderBySI(Order order, Type orderType) {
+	void removeOrder(Order order, Type orderType) {
 		if(orderType == Type.purchase)
 			requestedSecurities.get(order.getSI()).remove(order);
 		else
 			availableSecurities.get(order.getSI()).remove(order);
+	}
+	
+	public void initialiseListForSI(int si) {
+		availableSecurities.put(si, new ArrayList<Order>());
+		requestedSecurities.put(si, new ArrayList<Order>());		
 	}
 }

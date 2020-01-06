@@ -26,8 +26,10 @@ public class Main {
 			}else if(user instanceof Lister) {
 				ep.currentUser = (Lister) user;
 				displayListerScreen(ep);
-			}else if(user instanceof ExchangePlatformOperator)
+			}else if(user instanceof ExchangePlatformOperator) {
+				ep.currentUser = (ExchangePlatformOperator) user;
 				displayOperatorScreen(ep);
+			}
 			
 		}
 	}
@@ -62,16 +64,17 @@ public class Main {
 			System.out.println("2. Exit");
 			
 			int choice = Utils.getInt();
-			int[] indicies = new int [ep.login.users.size()];
+			int[] indicies = new int [ep.login.getUserCount()];
 			if(choice == 1) {
 				System.out.println("Users pending approval:");
 				System.out.println("Enter -1 to quit adding");
-				int i = 0, approvedCounter = 0;
-				for(ExchangeUser user : ep.login.users) {
-					if(user.getApproved())
+				int approvedCounter = 0;
+				for(int i = 0; i < ep.login.getUserCount(); i ++) {
+					
+					if(ep.login.getUserAtIndex(i).getApproved())
 						indicies[i] = -1;
 					else {
-						System.out.println((1+approvedCounter)+ ") " + user.getString());
+						System.out.println((1+approvedCounter)+ ") " + ep.login.getUserAtIndex(i).getString());
 						indicies[approvedCounter++] = i;
 					}
 					i++;
@@ -80,11 +83,12 @@ public class Main {
 				while(true) {
 					choice = Utils.getInt() - 1;
 					
-					if(choice == -1) {
+					if(choice == -2) {
 						System.out.println("Exiting...");
 						break;
 					}else if(indicies[choice] != -1) {
-						ep.login.approveUser(indicies[choice]);
+						ExchangePlatformOperator epo = (ExchangePlatformOperator) ep.currentUser;
+						epo.approveUser(ep, ep.login.getUserAtIndex(indicies[choice]));
 						break;
 					}else {
 						System.out.println("Not a valid index. Enter valid number:");
@@ -104,42 +108,41 @@ public class Main {
 			
 			System.out.println("1. Sell");
 			System.out.println("2. Purchase");
-			System.out.println("3. Exchange Operator Controls");
-			System.out.println("4. Print Selling");
-			System.out.println("5. Print Buying");
-			System.out.println("6. Run Matching");
-			System.out.println("7. Ouput Logbook");
-			System.out.println("8. Ouput Securites");
-			System.out.println("9. Cancel Order");
-			System.out.println("10. Log Out");
+			System.out.println("3. Print Selling");
+			System.out.println("4. Print Buying");
+			System.out.println("5. Run Matching");
+			System.out.println("6. Ouput Logbook");
+			System.out.println("7. Ouput Securites");
+			System.out.println("8. Cancel Order");
+			System.out.println("9. Log Out");
 			
 			int choice = Utils.getInt();
 			if(choice == 1) {
 				System.out.println("Available Securities to Sell:");
 				ep.outputSecurities();
-				Order inputtedOrder = Order.getOrderFromInput(ep.orderCounter++, (Trader) ep.currentUser, Type.sell);
+				Order inputtedOrder = Order.getOrderFromInput(ep.getNewOrder(), (Trader) ep.currentUser, Type.sell);
 				Trader.addOrder(ep, inputtedOrder);
-				ep.engine.fulFillOrders(ep);
+				MatchingEngine.fulFillOrders(ep);
 				
 			}else if(choice == 2) {
 				System.out.println("Available Securities to Purchase:");
 				ep.outputSecurities();
-				Order inputtedOrder = Order.getOrderFromInput(ep.orderCounter++, (Trader)ep.currentUser, Type.purchase);
+				Order inputtedOrder = Order.getOrderFromInput(ep.getNewOrder(), (Trader)ep.currentUser, Type.purchase);
 				Trader.addOrder(ep, inputtedOrder);
-				ep.engine.fulFillOrders(ep);
+				MatchingEngine.fulFillOrders(ep);
+			}else if(choice == 3) {
+				outputMap(ep, ep.orderBook.getAvailableSecurities());
 			}else if(choice == 4) {
-				outputMap(ep, ep.availableSecurities);
+				outputMap(ep, ep.orderBook.getRequestedSecurities());
 			}else if(choice == 5) {
-				outputMap(ep, ep.requestedSecurities);
+				MatchingEngine.fulFillOrders(ep);
 			}else if(choice == 6) {
-				ep.engine.fulFillOrders(ep);
-			}else if(choice == 7) {
 				ep.auditTrail.outputTransactions();
-			}else if(choice == 8) {
+			}else if(choice == 7) {
 				ep.outputSecurities();
-			}else if(choice == 9) {
+			}else if(choice == 8) {
 				ep.cancelOrderRelatedTo((Trader) ep.currentUser);
-			}else if(choice == 10) {
+			}else if(choice == 9) {
 				break;
 			}
 		}
@@ -148,10 +151,14 @@ public class Main {
 
 	void outputMap(ExchangePlatform ep, HashMap<Integer, ArrayList<Order>> map) {
 		for(Map.Entry<Integer, ArrayList<Order>> mapEntry : map.entrySet()) {
-			System.out.println(ep.securities.get(mapEntry.getKey()).getString());
-			System.out.println("--------");
-			for(Order order : mapEntry.getValue()) {
-				System.out.println("\t" + order.getString());
+			if(mapEntry.getValue().size() > 0) {
+				System.out.println(ep.securities.get(mapEntry.getKey()).getString());
+				System.out.println("--------");
+				for(Order order : mapEntry.getValue()) {
+					System.out.println("\t" + order.getString());
+				}
+				
+				System.out.println();
 			}
 			
 		}

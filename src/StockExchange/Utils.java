@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 public class Utils {
-	static Scanner sc = new Scanner(System.in);
+	private static Scanner sc = new Scanner(System.in);
 	// Utilities
 	public static int getInt() {
 		while(true) {

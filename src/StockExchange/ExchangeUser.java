@@ -13,7 +13,7 @@ public class ExchangeUser {
 		this.setName(name);
 	}
 	
-	void setApproved(boolean b) {
+	protected void setApproved(boolean b) {
 		this.approved = b;
 	}
 	
@@ -41,16 +41,21 @@ public class ExchangeUser {
 		return "Username:\t" + getUsername() + "\tPassword:\t"+getPassword()+"\tName\t"+name;
 	}
 	
-	public boolean cancelOrder(ExchangePlatform ep, int SI, Order order) {
-		
-		// Checking if order is a cancel order or a purchase oder
-		if(order.getType() == Type.purchase) {
+	public static boolean cancelOrder(ExchangePlatform ep, Order order) {
+		if(!order.getCancelled() && ep.securities.get(order.getSI()).getLister().getApproved() && order.getTrader().getApproved()) {
+			if(order.getType() == Type.purchase) {
+				ep.orderBook.removeOrder(order, Type.purchase);
+			}else if(order.getType() == Type.sell) {
+				ep.orderBook.removeOrder(order, Type.sell);
+				//reduce total supply
+				ep.securities.get(order.getSI()).setTotalSupply(ep.securities.get(order.getSI()).getTotalSupply() - order.getQuantity());
+			}
 			
-		}else if(order.getType() == Type.sell){
-			
-		}
+			order.setCancelled(true);
+			return true;
+		}else
+			return false;
 		
-		return false;
 	}
 		
 }

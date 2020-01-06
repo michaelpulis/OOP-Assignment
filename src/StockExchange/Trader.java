@@ -6,26 +6,18 @@ public class Trader extends ExchangeUser{
 	}
 	
 	public static boolean cancelOrder(Trader trader, Order order, ExchangePlatform ep) {
-		if(order.getTrader() == trader) {
-			if(order.getType() == Type.purchase) {
-				ep.requestedSecurities.get(order.getSI()).remove(order);
-			}else if(order.getType() == Type.sell) {
-				ep.availableSecurities.get(order.getSI()).remove(order);
-			}
-		
-			order.setCancelled(true);
-			return true;
-		}else 
-			return false;
+		return order.getTrader() == trader && cancelOrder(ep, order);			
 	}
 	
 	public static boolean addOrder(ExchangePlatform ep, Order order) {
-		if(ep.securities.get(order.getSI()).getLister().getApproved() && order.getTrader().getApproved()) {
+		// Check that both the lister and the trader have been approved,
+		// as well as if the order has been cancelled or not
+		if(!order.getCancelled() && ep.securities.get(order.getSI()).getLister().getApproved() && order.getTrader().getApproved()) {
 			if(order.getType() == Type.sell) {
-				ep.addOrderToMap(order, ep.availableSecurities);
+				ep.addOrderToMap(order, ep.orderBook.getAvailableSecurities());
 				ep.addTotalSupply(order.getSI(), order.getQuantity());
 			}else if(order.getType() == Type.purchase) {
-				ep.addOrderToMap(order, ep.requestedSecurities);
+				ep.addOrderToMap(order, ep.orderBook.getRequestedSecurities());
 			}
 			
 			return true;

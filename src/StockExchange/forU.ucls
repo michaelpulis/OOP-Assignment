@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="StockExchange.LoginSystem" project="OOP1" 
+    file="/OOP1/src/StockExchange/LoginSystem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="758" y="265"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="StockExchange.MatchingEngine" project="OOP1" 
+    file="/OOP1/src/StockExchange/MatchingEngine.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="348" y="348"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="StockExchange.ExchangeUser" project="OOP1" 
+    file="/OOP1/src/StockExchange/ExchangeUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="592" y="520"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="StockExchange.Security" project="OOP1" 
+    file="/OOP1/src/StockExchange/Security.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1207" y="129"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="StockExchange.Trader" project="OOP1" file="/OOP1/src/StockExchange/Trader.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="681" y="774"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="StockExchange.Lister" project="OOP1" file="/OOP1/src/StockExchange/Lister.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="286" y="667"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="StockExchange.Order" project="OOP1" file="/OOP1/src/StockExchange/Order.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="962" y="651"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="StockExchange.ExchangePlatformOperator" project="OOP1" 
+    file="/OOP1/src/StockExchange/ExchangePlatformOperator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="279" y="519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="StockExchange.OrderBook" project="OOP1" 
+    file="/OOP1/src/StockExchange/OrderBook.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="830" y="10"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="StockExchange.ExchangePlatform" project="OOP1" 
+    file="/OOP1/src/StockExchange/ExchangePlatform.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="347" y="67"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="11" language="java" name="StockExchange.Type" project="OOP1" file="/OOP1/src/StockExchange/Type.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1190" y="651"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <association id="12">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="13" name="engine"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="15">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="17">    
+    <bendpoint x="781" y="652"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="18" name="trader">        
+        <position height="18" width="37" x="871" y="693"/>      
+      </attribute>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="21" name="type">        
+        <position height="18" width="29" x="1083" y="628"/>      
+      </attribute>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="23">    
+    <bendpoint x="592" y="691"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="24">    
+    <bendpoint x="1274" y="497"/>    
+    <bendpoint x="1275" y="954"/>    
+    <bendpoint x="286" y="951"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="25" name="lister"/>      
+      <multiplicity id="26" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="27">    
+    <bendpoint x="627" y="146"/>    
+    <bendpoint x="1031" y="148"/>    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="28" name="securities">        
+        <position height="18" width="57" x="1027" y="71"/>      
+      </attribute>      
+      <multiplicity id="29" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="31" name="users"/>      
+      <multiplicity id="32" minimum="0" maximum="2147483647">        
+        <position height="16" width="21" x="711" y="358"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="33">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="34" name="orderBook"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="37" name="login">        
+        <position height="18" width="32" x="558" y="183"/>      
+      </attribute>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="39">    
+    <bendpoint x="525" y="372"/>    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="40" name="currentUser">        
+        <position height="18" width="68" x="504" y="324"/>      
+      </attribute>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="false" multiplicity="true"/>
+</class-diagram>

@@ -1,8 +1,5 @@
 package StockExchange;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 
 
 public class Order {
@@ -12,7 +9,7 @@ public class Order {
 	private float quantity;
 	private Trader trader;
 	private Type type;
-	private boolean cancelled;
+	private boolean cancelled, earmarked;
 	private int orderID;
 	
 	public Order(int orderID, int SI, float price, float quantity, String date, Type type, Trader trader) {
@@ -100,6 +97,15 @@ public class Order {
 		
 		return new Order(orderID, SI, price, quantity, date, type, currentTrader);
 	}
+
+	public boolean isEarmarked() {
+		return earmarked;
+	}
+
+	public void setEarmarked(boolean earmarked) {
+		this.earmarked = earmarked;
+	}
+	
 	
 	
 }
