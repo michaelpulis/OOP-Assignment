@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class ExchangePlatform {
 	
 	HashMap<Integer, Security> securities = new HashMap<>();
-	private int orderCounter = 0;
+	private int orderCounter = 0, siCounter = 0;
 	
 	MatchingEngine engine;
 	AuditTrail auditTrail;
@@ -58,7 +58,7 @@ public class ExchangePlatform {
 	}
 	
 	public void performPurchase(int SI, Order purchaseOrder, Order sellOrder) {
-		System.out.println("Order fulfilled between the following:");
+		System.out.println("Order fulfilled between the following (SI = " + sellOrder.getSI()+ "):");
 		System.out.println("BUY :" + purchaseOrder.getString());
 		System.out.println("SELL:" + sellOrder.getString());
 		
@@ -73,6 +73,7 @@ public class ExchangePlatform {
 		
 		//Since total supply has decreased, decrease the total supply
 		securities.get(SI).setTotalSupply(securities.get(SI).getTotalSupply() - purchaseOrder.getQuantity());
+		System.out.println();
 	}
 	
 	void addOrderToMap(Order order, HashMap<Integer, ArrayList<Order>> map){
@@ -229,16 +230,7 @@ public class ExchangePlatform {
 	}	
 	
 	public int getNewSI() {
-		while(true) {
-			int random = (int)(Math.random() * 100);
-			if(!orderBook.getAvailableSecurities().isEmpty())
-				for(int SI : orderBook.getAvailableSecurities().keySet()) {
-					if(SI != random)
-						return random;
-				}
-			else
-				return random;
-		}
+		return siCounter ++;
 	}
 	
 	public int getNewOrder() {

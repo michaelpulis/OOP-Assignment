@@ -165,6 +165,9 @@ class MatchingTesting {
 		Trader trader2 = new Trader("Guy", "Manuel", "Guy Manuel", true);
 		ep.login.addUser(trader2);
 		
+		System.out.println("firstsec " + security1.getSI());
+		System.out.println("secsec " + security2.getSI());
+		
 		Order order1 = new Order(ep.getNewOrder(), security1.getSI(), 2.3f, 10, Utils.getTime(), Type.sell, trader1);
 		Order order2 = new Order(ep.getNewOrder(), security2.getSI(), 2.4f, 10, Utils.getTime(), Type.purchase, trader2);
 		
@@ -211,7 +214,7 @@ class MatchingTesting {
 	
 	@Test
 	void attemptMatchMultipleSellWithMultipleBuyMultipleSecurities() {
-		System.out.println("attemptMatchMultipleSellWithMultipleBuy");
+		System.out.println("attemptMatchMultipleSellWithMultipleBuyMultipleSecurities");
 
 		ExchangePlatform ep = new ExchangePlatform();
 		Lister lister1 = new Lister("Damon", "Albarn", "Damon Albarn", true);
@@ -229,14 +232,14 @@ class MatchingTesting {
 		ep.login.addUser(trader2);
 		
 		Order order1 = new Order(ep.getNewOrder(), security1.getSI(), 2.3f, 10, Utils.getTime(), Type.sell, trader1);
-		Order order2 = new Order(ep.getNewOrder(), security1.getSI(), 2.2f, 10, Utils.getTime(), Type.sell, trader1);
-		Order order3 = new Order(ep.getNewOrder(), security1.getSI(), 2.4f, 10, Utils.getTime(), Type.purchase, trader2);
+		Order order2 = new Order(ep.getNewOrder(), security1.getSI(), 2.2f, 5, Utils.getTime(), Type.sell, trader1);
+		Order order3 = new Order(ep.getNewOrder(), security1.getSI(), 2.4f, 5, Utils.getTime(), Type.purchase, trader2);
 		Order order4 = new Order(ep.getNewOrder(), security1.getSI(), 2.4f, 10, Utils.getTime(), Type.purchase, trader2);
 		
-		Order order5 = new Order(ep.getNewOrder(), security2.getSI(), 1.9f, 10, Utils.getTime(), Type.sell, trader1);
-		Order order6 = new Order(ep.getNewOrder(), security2.getSI(), 2.f, 10, Utils.getTime(), Type.sell, trader1);
-		Order order7 = new Order(ep.getNewOrder(), security2.getSI(), 1.9f, 10, Utils.getTime(), Type.purchase, trader2);
-		Order order8 = new Order(ep.getNewOrder(), security2.getSI(), 2.1f, 10, Utils.getTime(), Type.purchase, trader2);
+		Order order5 = new Order(ep.getNewOrder(), security2.getSI(), 1.9f, 6, Utils.getTime(), Type.sell, trader1);
+		Order order6 = new Order(ep.getNewOrder(), security2.getSI(), 2.f, 14, Utils.getTime(), Type.sell, trader1);
+		Order order7 = new Order(ep.getNewOrder(), security2.getSI(), 1.9f, 6, Utils.getTime(), Type.purchase, trader2);
+		Order order8 = new Order(ep.getNewOrder(), security2.getSI(), 2.1f, 14, Utils.getTime(), Type.purchase, trader2);
 		
 		Trader.addOrder(ep, order1);
 		Trader.addOrder(ep, order2);

@@ -158,6 +158,10 @@ public class LoginSystem {
 	public int getUserCount() {
 		return users.size();
 	}
+	
+	public int getUserIndex(ExchangeUser user) {
+		return users.indexOf(user);
+	}
 
 	public ExchangeUser getUserAtIndex(int i) {
 		// TODO Auto-generated method stub

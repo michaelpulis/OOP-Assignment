@@ -42,6 +42,7 @@ public class ExchangeUser {
 	}
 	
 	public static boolean cancelOrder(ExchangePlatform ep, Order order) {
+		System.out.println(order.getTrader().getName() + " : " +order.getTrader().getApproved());
 		if(!order.getCancelled() && ep.securities.get(order.getSI()).getLister().getApproved() && order.getTrader().getApproved()) {
 			if(order.getType() == Type.purchase) {
 				ep.orderBook.removeOrder(order, Type.purchase);
